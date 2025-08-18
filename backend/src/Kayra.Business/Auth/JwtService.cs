@@ -19,7 +19,7 @@ public class JwtService : IJwtService
 
     public string GenerateToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[JwtConstants.Key]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[Constants.JwtConstants.Key]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -30,8 +30,8 @@ public class JwtService : IJwtService
         };
 
         var token = new JwtSecurityToken(
-            issuer: _configuration[JwtConstants.Issuer],
-            audience: _configuration[JwtConstants.Audience],
+            issuer: _configuration[Constants.JwtConstants.Issuer],
+            audience: _configuration[Constants.JwtConstants.Audience],
             claims: claims,
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
