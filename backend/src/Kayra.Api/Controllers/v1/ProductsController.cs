@@ -1,3 +1,5 @@
+using AutoMapper;
+using Kayra.Api.Dtos.Product;
 using Kayra.Business;
 using Kayra.Core.Pagination;
 using Kayra.Entities;
@@ -12,59 +14,69 @@ namespace Kayra.Api.Controllers.v1;
 public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
+    private readonly IMapper _mapper;
 
-    public ProductsController(IProductService productService)
+    public ProductsController(IProductService productService, IMapper mapper)
     {
         _productService = productService;
+        _mapper = mapper;
     }
 
     /// <summary>
     /// Get all products with pagination
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationQuery paginationQuery)
+    public async Task<ActionResult<PagedResult<ProductResponse>>> GetAll([FromQuery] PaginationQuery paginationQuery)
     {
         var result = await _productService.GetAllAsync(paginationQuery);
-        return Ok(result);
+        var response = new PagedResult<ProductResponse>
+        {
+            Items = _mapper.Map<IEnumerable<ProductResponse>>(result.Items),
+            TotalCount = result.TotalCount,
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize
+        };
+        return Ok(response);
     }
 
     /// <summary>
     /// Get product by ID
     /// </summary>
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<ProductResponse>> GetById(int id)
     {
         var product = await _productService.GetByIdAsync(id);
 
         if (product == null)
             return NotFound();
 
-        return Ok(product);
+        var response = _mapper.Map<ProductResponse>(product);
+        return Ok(response);
     }
 
     /// <summary>
     /// Get products by category ID
     /// </summary>
     [HttpGet("category/{categoryId:int}")]
-    public async Task<IActionResult> GetByCategory(int categoryId)
+    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetByCategory(int categoryId)
     {
         var products = await _productService.GetByCategoryIdAsync(categoryId);
-        return Ok(products);
+        var response = _mapper.Map<IEnumerable<ProductResponse>>(products);
+        return Ok(response);
     }
 
     /// <summary>
     /// Create a new product
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Product product)
+    public async Task<ActionResult<ProductResponse>> Create([FromBody] CreateProductRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         try
         {
+            var product = _mapper.Map<Product>(request);
             var createdProduct = await _productService.CreateAsync(product);
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+            var response = _mapper.Map<ProductResponse>(createdProduct);
+            return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, response);
         }
         catch (ArgumentException ex)
         {
@@ -76,18 +88,17 @@ public class ProductsController : ControllerBase
     /// Update an existing product
     /// </summary>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Product product)
+    public async Task<ActionResult<ProductResponse>> Update(int id, [FromBody] UpdateProductRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        if (id != product.Id)
+        if (id != request.Id)
             return BadRequest("ID mismatch");
 
         try
         {
+            var product = _mapper.Map<Product>(request);
             var updatedProduct = await _productService.UpdateAsync(product);
-            return Ok(updatedProduct);
+            var response = _mapper.Map<ProductResponse>(updatedProduct);
+            return Ok(response);
         }
         catch (InvalidOperationException)
         {

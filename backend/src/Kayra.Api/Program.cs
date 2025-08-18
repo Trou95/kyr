@@ -43,6 +43,7 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
