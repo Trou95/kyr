@@ -1,4 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Kayra.Api.Constants;
+using Kayra.Api.Dtos.Product;
+using Kayra.Api.Validators.Category;
+using Kayra.Api.Validators.Product;
 using Kayra.Business;
 using Kayra.Data;
 using Kayra.Data.Repositories;
@@ -44,6 +49,9 @@ builder.Services.AddVersionedApiExplorer(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
