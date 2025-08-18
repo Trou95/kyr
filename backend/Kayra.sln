@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E65FDF30-3F5B-4035-AB9C-941B6487C83B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kayra.Api", "src\Kayra.Api\Kayra.Api.csproj", "{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kayra.Core", "src\Kayra.Core\Kayra.Core.csproj", "{5FABEE80-AB86-4181-8820-E95CA400F24A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kayra.Business", "src\Kayra.Business\Kayra.Business.csproj", "{F868DC18-637B-4E21-8FF7-3F34EE604134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kayra.Data", "src\Kayra.Data\Kayra.Data.csproj", "{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kayra.Entities", "src\Kayra.Entities\Kayra.Entities.csproj", "{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FABEE80-AB86-4181-8820-E95CA400F24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FABEE80-AB86-4181-8820-E95CA400F24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FABEE80-AB86-4181-8820-E95CA400F24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FABEE80-AB86-4181-8820-E95CA400F24A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F868DC18-637B-4E21-8FF7-3F34EE604134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F868DC18-637B-4E21-8FF7-3F34EE604134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F868DC18-637B-4E21-8FF7-3F34EE604134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F868DC18-637B-4E21-8FF7-3F34EE604134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6CB2847-07EC-4D84-BEDD-5C1D7ADB848F} = {E65FDF30-3F5B-4035-AB9C-941B6487C83B}
+		{5FABEE80-AB86-4181-8820-E95CA400F24A} = {E65FDF30-3F5B-4035-AB9C-941B6487C83B}
+		{F868DC18-637B-4E21-8FF7-3F34EE604134} = {E65FDF30-3F5B-4035-AB9C-941B6487C83B}
+		{5BDB1B41-50AD-4C62-9DDF-FE4F920806AD} = {E65FDF30-3F5B-4035-AB9C-941B6487C83B}
+		{B175D9B2-56BF-4245-95BB-DEC87DE5DBAA} = {E65FDF30-3F5B-4035-AB9C-941B6487C83B}
+	EndGlobalSection
+EndGlobal
