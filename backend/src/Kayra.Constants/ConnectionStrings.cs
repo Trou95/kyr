@@ -1,4 +1,4 @@
-namespace Kayra.Api.Constants;
+namespace Kayra.Constants;
 
 public static class ConnectionStrings
 {
