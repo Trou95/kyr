@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kayra.Core\Kayra.Core.csproj" />
+    <ProjectReference Include="..\Kayra.Entities\Kayra.Entities.csproj" />
   </ItemGroup>
 
 </Project>
