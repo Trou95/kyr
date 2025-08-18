@@ -3,6 +3,7 @@ using Kayra.Api.Dtos.Product;
 using Kayra.Business;
 using Kayra.Core.Pagination;
 using Kayra.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kayra.Api.Controllers.v1;
@@ -11,6 +12,7 @@ namespace Kayra.Api.Controllers.v1;
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [Produces("application/json")]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;

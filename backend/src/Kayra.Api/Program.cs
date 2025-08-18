@@ -1,15 +1,16 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Kayra.Api.Constants;
-using Kayra.Api.Dtos.Product;
-using Kayra.Api.Validators.Category;
-using Kayra.Api.Validators.Product;
-using Kayra.Business;
+using Kayra.Api.Extensions;
+using Kayra.Constants;
 using Kayra.Data;
-using Kayra.Data.Repositories;
+using Kayra.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,13 +24,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString(ConnectionStrings.DefaultConnection)));
 
-// Register repositories
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+// Identity
+builder.Services.AddIdentity<User, IdentityRole<int>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
-// Register services
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+// Register repositories and services
+builder.Services.AddRepositories();
+builder.Services.AddBusinessServices();
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -53,6 +55,26 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration[JwtConstants.Issuer],
+            ValidAudience = builder.Configuration[JwtConstants.Audience],
+            IssuerSigningKey = new SymmetricSecurityKey(
+         Encoding.UTF8.GetBytes(builder.Configuration[JwtConstants.Key]!))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,6 +86,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
