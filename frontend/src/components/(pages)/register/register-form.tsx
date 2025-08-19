@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/hooks/use-auth';
+import { register } from '@/api/auth.api';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterForm() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export default function RegisterForm() {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { register } = useAuth();
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,8 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      await register({ username, email, password });
+      await register( username, email, password );
+      router.push('/');
     } catch (error: any) {
       setError(error.message || 'Registration failed');
     } finally {
@@ -36,11 +38,7 @@ export default function RegisterForm() {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-      {error && (
-        <div className="text-red-600 text-sm text-center">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-center text-sm text-red-600">{error}</div>}
       <div className="space-y-4">
         <div>
           <label htmlFor="username" className="sr-only">
