@@ -4,15 +4,13 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { UserProvider } from '@/contexts/user-context';
 import { getMeApi } from '@/api/current-user.api';
 
-
 export default async function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const currentUser = await getMeApi()
-  console.log(currentUser)
+  const currentUser = await getMeApi();
+  console.log(currentUser);
 
   return (
     <UserProvider currentUser={currentUser}>
@@ -20,9 +18,7 @@ export default async function HomeLayout({
         <AppSidebar />
         <main className="w-full">
           <SidebarTrigger />
-          <div className={"p-1"}>
-            {children}
-          </div>
+          <div className={'p-1'}>{children}</div>
         </main>
       </SidebarProvider>
     </UserProvider>

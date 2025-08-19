@@ -13,7 +13,7 @@ export default function RegisterForm() {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      await register( username, email, password );
+      await register(username, email, password);
       router.push('/');
     } catch (error: any) {
       setError(error.message || 'Registration failed');

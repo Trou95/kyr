@@ -20,7 +20,6 @@ export interface AuthResponse {
 }
 
 class AuthService {
-
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
       const response = await axios.post(`${API_URL}/auth/login`, credentials, {
@@ -55,11 +54,14 @@ class AuthService {
 
   async logout(): Promise<void> {
     try {
-      await axios.post(`${API_URL}/auth/logout`, {}, {
-        withCredentials: true,
-      });
-    }
-    catch {}
+      await axios.post(
+        `${API_URL}/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+    } catch {}
   }
 }
 

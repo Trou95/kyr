@@ -4,11 +4,10 @@ import { getAllProducts } from '@/api/products.api';
 import { getAllCategories } from '@/api/categories.api';
 
 export default async function Home() {
-
-  const [products, categories] = await Promise.all([getAllProducts(), getAllCategories()])
+  const [products, categories] = await Promise.all([getAllProducts(), getAllCategories()]);
 
   return (
-    <div className="w-full grid grid-cols-2 gap-4">
+    <div className="grid w-full grid-cols-2 gap-4">
       <SummaryCard
         title="Total Categories"
         description=""
