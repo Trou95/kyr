@@ -24,6 +24,7 @@ public class ProductRepository : IProductRepository
     public async Task<PagedResult<Product>> GetAllAsync(PaginationQuery paginationQuery)
     {
         return await _context.Products
+            .Where(p => p.DeletedAt == null)
             .Include(p => p.Category)
             .ToPagedResultAsync(paginationQuery.PageNumber, paginationQuery.PageSize);
     }

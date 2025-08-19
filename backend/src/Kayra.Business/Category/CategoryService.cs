@@ -46,8 +46,14 @@ public class CategoryService : ICategoryService
         if (existingCategory == null)
             throw new InvalidOperationException($"Category with ID {category.Id} not found");
 
-        await _categoryRepository.UpdateAsync(category);
-        return category;
+        existingCategory.Name = category.Name;
+        existingCategory.Description = category.Description;
+        existingCategory.IsActive = category.IsActive;
+        existingCategory.UpdatedAt = DateTime.UtcNow;
+
+        await _categoryRepository.UpdateAsync(existingCategory);
+
+        return existingCategory;
     }
 
     public async Task DeleteAsync(int id)

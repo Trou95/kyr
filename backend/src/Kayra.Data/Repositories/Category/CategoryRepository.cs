@@ -16,13 +16,20 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category?> GetByIdAsync(int id)
     {
-        return await _context.Categories
+        Console.WriteLine($"[Repository.GetByIdAsync] Looking for category with ID: {id}");
+
+        var category = await _context.Categories
             .FirstOrDefaultAsync(c => c.Id == id);
+
+        Console.WriteLine($"[Repository.GetByIdAsync] Result: {(category == null ? "NULL" : $"Found: {category.Name}")}");
+
+        return category;
     }
 
     public async Task<PagedResult<Category>> GetAllAsync(PaginationQuery paginationQuery)
     {
         return await _context.Categories
+            .Where(c => c.DeletedAt == null)
             .ToPagedResultAsync(paginationQuery.PageNumber, paginationQuery.PageSize);
     }
 
