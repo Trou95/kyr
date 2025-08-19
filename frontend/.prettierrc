@@ -11,7 +11,5 @@
   "bracketSameLine": false,
   "endOfLine": "lf",
   "quoteProps": "as-needed",
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
