@@ -16,17 +16,33 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/use-auth';
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
+  const { user, logout, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg" disabled>
+            <div className="h-8 w-8 rounded-lg bg-muted animate-pulse" />
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="h-4 bg-muted rounded animate-pulse" />
+              <div className="h-3 bg-muted rounded animate-pulse mt-1" />
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
+  if (!user) return null;
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <SidebarMenu>
@@ -38,13 +54,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src="" alt={user.username} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name.charAt(0).toUpperCase()}
+                  {user.username.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{user.username}</span>
                 <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               </div>
             </SidebarMenuButton>
@@ -58,13 +74,13 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src="" alt={user.username} />
                   <AvatarFallback className="rounded-lg">
-                    {user.name.charAt(0).toUpperCase()}
+                    {user.username.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{user.username}</span>
                   <span className="truncate text-xs text-muted-foreground">{user.email}</span>
                 </div>
               </div>
@@ -72,7 +88,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>Account</DropdownMenuItem>
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -3,30 +3,32 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function RegisterForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
     if (password !== confirmPassword) {
-      alert('Şifreler eşleşmiyor!');
+      setError('Şifreler eşleşmiyor!');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // TODO: API call for register
-      console.log('Register attempt:', { email, password, firstName, lastName });
-    } catch (error) {
-      console.error('Register error:', error);
+      await register({ username, email, password });
+    } catch (error: any) {
+      setError(error.message || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
@@ -34,33 +36,24 @@ export default function RegisterForm() {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      {error && (
+        <div className="text-red-600 text-sm text-center">
+          {error}
+        </div>
+      )}
       <div className="space-y-4">
         <div>
-          <label htmlFor="firstName" className="sr-only">
-            Ad
+          <label htmlFor="username" className="sr-only">
+            Kullanıcı Adı
           </label>
           <Input
-            id="firstName"
-            name="firstName"
+            id="username"
+            name="username"
             type="text"
             required
-            placeholder="Ad"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName" className="sr-only">
-            Soyad
-          </label>
-          <Input
-            id="lastName"
-            name="lastName"
-            type="text"
-            required
-            placeholder="Soyad"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Kullanıcı Adı"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>

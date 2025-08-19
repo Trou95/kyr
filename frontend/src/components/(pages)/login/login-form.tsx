@@ -3,21 +3,24 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
     try {
-      // TODO: API call for login
-      console.log('Login attempt:', { email, password });
-    } catch (error) {
-      console.error('Login error:', error);
+      await login({ email, password });
+    } catch (error: any) {
+      setError(error.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -25,6 +28,11 @@ export default function LoginForm() {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      {error && (
+        <div className="text-red-600 text-sm text-center">
+          {error}
+        </div>
+      )}
       <div className="space-y-4">
         <div>
           <label htmlFor="email" className="sr-only">
