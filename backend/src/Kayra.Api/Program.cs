@@ -49,7 +49,7 @@ builder.Services.AddApiVersioning(options =>
 
 builder.Services.AddVersionedApiExplorer(options =>
 {
-    options.GroupNameFormat = "'v'VVV";
+    options.GroupNameFormat = builder.Configuration[ConfigKeys.ApiVersioningGroupNameFormat]!;
     options.SubstituteApiVersionInUrl = true;
 });
 
@@ -84,9 +84,12 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFront", policy =>
+    var policyName = builder.Configuration[ConfigKeys.CorsPolicyName]!;
+    var allowedOrigins = builder.Configuration.GetSection(ConfigKeys.CorsAllowedOrigins).Get<string[]>()!;
+    
+    options.AddPolicy(policyName, policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -110,7 +113,7 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowFront");
+app.UseCors(builder.Configuration[ConfigKeys.CorsPolicyName]!);
 
 app.UseAuthentication();
 app.UseAuthorization();
