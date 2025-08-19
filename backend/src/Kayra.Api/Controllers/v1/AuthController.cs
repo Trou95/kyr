@@ -1,6 +1,7 @@
 using Kayra.Api.Dtos.Auth;
 using Kayra.Business.Auth;
 using Kayra.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,10 +74,10 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Username);
+        var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
-            return Unauthorized("Invalid email or password");
+            return Unauthorized("Invalid email or password2");
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
@@ -103,6 +104,29 @@ public class AuthController : ControllerBase
         };
 
         Response.Cookies.Append("token", token, cookieOptions);
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Get current user information
+    /// </summary>
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<ActionResult<UserResponse>> GetCurrentUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        var response = new UserResponse
+        {
+            Id = user.Id,
+            Username = user.UserName!,
+            Email = user.Email!
+        };
 
         return Ok(response);
     }
