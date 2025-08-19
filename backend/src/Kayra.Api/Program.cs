@@ -79,6 +79,17 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFront", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 
 
 var app = builder.Build();
@@ -95,6 +106,8 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFront");
 
 app.UseAuthentication();
 app.UseAuthorization();
