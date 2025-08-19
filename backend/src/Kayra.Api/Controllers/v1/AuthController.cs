@@ -54,6 +54,16 @@ public class AuthController : ControllerBase
             Username = user.UserName!
         };
 
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false, // Development için false
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddHours(1)
+        };
+
+        Response.Cookies.Append("token", token, cookieOptions);
+
         return Ok(response);
     }
 
@@ -63,10 +73,10 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
-        var user = await _userManager.FindByNameAsync(request.Username);
+        var user = await _userManager.FindByEmailAsync(request.Username);
         if (user == null)
         {
-            return Unauthorized("Invalid username or password");
+            return Unauthorized("Invalid email or password");
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
@@ -83,6 +93,16 @@ public class AuthController : ControllerBase
             UserId = user.Id,
             Username = user.UserName!
         };
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false, // Development için false
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddHours(1)
+        };
+
+        Response.Cookies.Append("token", token, cookieOptions);
 
         return Ok(response);
     }
