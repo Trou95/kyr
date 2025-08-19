@@ -5,7 +5,6 @@ import {
   ICreateCategoryRequest,
   IUpdateCategoryRequest,
 } from '@/app/(home)/categories/actions/category.actions';
-import { request } from 'node:http';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 

@@ -8,7 +8,7 @@ import {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getAllProducts(): Promise<IPagedResult<IProductResponse>> {
+export async function getAllProducts(): Promise<IPagedResult<IProductResponse> | null> {
   return await fetchServerAPI(`${BASE_URL}/products`, {
     method: 'GET',
     next: {

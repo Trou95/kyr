@@ -14,7 +14,7 @@ export function UserProvider({
   currentUser,
   children,
 }: {
-  currentUser: ICurrentUser;
+  currentUser: ICurrentUser | null;
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<ICurrentUser | null>(currentUser);

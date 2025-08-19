@@ -31,8 +31,9 @@ class AuthService {
         token,
         user: { username, email: credentials.email },
       };
-    } catch (error: never) {
-      throw new Error(error.response?.data?.message || 'Login failed');
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      throw new Error(axiosError.response?.data?.message || 'Login failed');
     }
   }
 
@@ -47,8 +48,9 @@ class AuthService {
         token,
         user: { username, email: credentials.email },
       };
-    } catch (error: never) {
-      throw new Error(error.response?.data?.message || 'Registration failed');
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      throw new Error(axiosError.response?.data?.message || 'Registration failed');
     }
   }
 

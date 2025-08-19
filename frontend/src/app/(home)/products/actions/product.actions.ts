@@ -1,6 +1,5 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { createProductAPI, deleteProductAPI, updateProductAPI } from '@/api/products.api';
 

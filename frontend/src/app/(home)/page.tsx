@@ -12,13 +12,13 @@ export default async function Home() {
         title="Total Categories"
         description=""
         icon={<Container />}
-        value={categories.totalCount}
+        value={categories?.totalCount || 0}
       />
       <SummaryCard
         title="Total Products"
         description=""
         icon={<Package />}
-        value={products.totalCount}
+        value={products?.totalCount || 0}
       />
     </div>
   );

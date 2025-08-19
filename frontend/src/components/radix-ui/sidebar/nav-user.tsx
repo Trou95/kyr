@@ -20,23 +20,7 @@ import { useAuth } from '@/hooks/use-auth';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { user, logout, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton size="lg" disabled>
-            <div className="h-8 w-8 animate-pulse rounded-lg bg-muted" />
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <div className="h-4 animate-pulse rounded bg-muted" />
-              <div className="mt-1 h-3 animate-pulse rounded bg-muted" />
-            </div>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    );
-  }
+  const { user, logout } = useAuth();
 
   if (!user) return null;
 
