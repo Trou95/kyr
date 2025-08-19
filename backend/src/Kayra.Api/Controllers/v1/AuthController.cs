@@ -58,7 +58,7 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = false, // Development için false
+            Secure = false,
             SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddHours(1)
         };
@@ -77,7 +77,7 @@ public class AuthController : ControllerBase
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
-            return Unauthorized("Invalid email or password2");
+            return Unauthorized("Invalid email or password");
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = false, // Development için false
+            Secure = false,
             SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddHours(1)
         };
@@ -129,5 +129,15 @@ public class AuthController : ControllerBase
         };
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Logout user
+    /// </summary>
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("token");
+        return Ok(new { message = "Logged out successfully" });
     }
 }
