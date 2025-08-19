@@ -1,15 +1,22 @@
 import React from 'react';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { AppSidebar } from '@/components/radix-ui/sidebar/app-sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
-export default function HomeLayout({
+
+export default async function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="flex-1">{children}</div>
-    </div>
-  );
+    <SidebarProvider >
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  )
 }

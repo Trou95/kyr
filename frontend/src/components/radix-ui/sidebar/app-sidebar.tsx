@@ -30,11 +30,6 @@ const items = [
   },
 ];
 
-const user = {
-  name: 'shadcn',
-  email: 'm@example.com',
-  avatar: '/avatars/shadcn.jpg',
-};
 
 export function AppSidebar() {
   return (
@@ -59,7 +54,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );
