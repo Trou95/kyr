@@ -60,7 +60,8 @@ public class AuthController : ControllerBase
             HttpOnly = true,
             Secure = false,
             SameSite = SameSiteMode.Lax,
-            Expires = DateTime.UtcNow.AddHours(1)
+            Expires = DateTime.UtcNow.AddHours(1),
+            Path = "/"
         };
 
         Response.Cookies.Append("token", token, cookieOptions);
@@ -100,7 +101,8 @@ public class AuthController : ControllerBase
             HttpOnly = true,
             Secure = false,
             SameSite = SameSiteMode.Lax,
-            Expires = DateTime.UtcNow.AddHours(1)
+            Expires = DateTime.UtcNow.AddHours(1),
+            Path = "/"
         };
 
         Response.Cookies.Append("token", token, cookieOptions);
