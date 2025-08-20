@@ -3,7 +3,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 FROM node:20-alpine AS builder
 WORKDIR /app
@@ -13,6 +13,8 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
+ENV NEXT_PUBLIC_API_URL http://localhost:8081
+ENV NEXT_PUBLIC_TOKEN_KEY token
 
 RUN npm run build
 
@@ -25,7 +27,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+RUN mkdir -p public
 
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
@@ -40,5 +42,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Uygulamayı başlat
 CMD ["node", "server.js"]

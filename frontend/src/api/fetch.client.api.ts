@@ -16,15 +16,19 @@ export async function fetchClientAPI<T>(url: string, options: RequestInit = {}):
   });
 
   if (!response.ok) {
-    const body = (await response.json())[0];
-    console.log(body);
-    const message = body?.description || 'An error occurred while processing your request.';
-    return onFetchError(message);
+   try {
+     const body = (await response.json())[0];
+     const message = body?.description || 'An error occurred while processing your request.';
+     return onFetchError(message);
+   }
+    catch {
+      return onFetchError('An unexpected error occurred.');
+    }
   }
 
   return response.json();
 }
 
-function onFetchError(response: Response): never {
+function onFetchError(response: string): never {
   throw new Error(`Error: ${response}`);
 }

@@ -16,16 +16,31 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { useAuth } from '@/hooks/use-auth';
+import { useContext } from 'react';
+import { UserContext } from '@/contexts/user-context';
+import { logout } from '@/api/auth.api';
+import { useRouter } from 'next/navigation';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { user, logout } = useAuth();
+  const context = useContext(UserContext);
+  const router = useRouter();
+
+  if (!context) return null;
+  const { user, setUser } = context;
 
   if (!user) return null;
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      setUser(null);
+      router.push('/login');
+    }
   };
 
   return (

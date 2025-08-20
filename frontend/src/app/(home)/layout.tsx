@@ -10,7 +10,6 @@ export default async function HomeLayout({
   children: React.ReactNode;
 }>) {
   const currentUser = await getMeApi();
-  console.log(currentUser);
 
   return (
     <UserProvider currentUser={currentUser}>

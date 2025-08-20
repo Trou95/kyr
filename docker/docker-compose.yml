@@ -12,6 +12,45 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - kayra-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: kayra-backend
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=products;Username=kayraexp;Password=12345
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - kayra-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: kayra-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://backend:8080
+      - NEXT_PUBLIC_TOKEN_KEY=token
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - kayra-network
 
 volumes:
   postgres_data:
+
+networks:
+  kayra-network:
+    driver: bridge

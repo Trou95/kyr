@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 export async function fetchServerAPI<T>(url: string, options: RequestInit = {}): Promise<T | null> {
   const token = cookies().get(process.env.NEXT_PUBLIC_TOKEN_KEY!)?.value;
 
+  const serverUrl = url.replace('http://localhost:8081', 'http://backend:8080');
+
   const defaultHeaders = {
     'Content-Type': 'application/json',
     Cookie: cookies().toString(),
@@ -15,7 +17,7 @@ export async function fetchServerAPI<T>(url: string, options: RequestInit = {}):
   });
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(serverUrl, {
       ...options,
       headers,
     });

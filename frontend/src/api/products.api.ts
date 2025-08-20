@@ -6,7 +6,7 @@ import {
   IUpdateProductRequest,
 } from '@/app/(home)/products/actions/product.actions';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 
 export async function getAllProducts(): Promise<IPagedResult<IProductResponse> | null> {
   return await fetchServerAPI(`${BASE_URL}/products`, {

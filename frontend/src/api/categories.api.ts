@@ -6,7 +6,7 @@ import {
   IUpdateCategoryRequest,
 } from '@/app/(home)/categories/actions/category.actions';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 
 export async function getAllCategories(): Promise<IPagedResult<ICategoryResponse> | null> {
   return await fetchServerAPI(`${BASE_URL}/categories`, {

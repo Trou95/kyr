@@ -67,12 +67,10 @@ builder.Services.AddAuthentication(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration[JwtConstants.Issuer],
-            ValidAudience = builder.Configuration[JwtConstants.Audience],
             IssuerSigningKey = new SymmetricSecurityKey(
          Encoding.UTF8.GetBytes(builder.Configuration[JwtConstants.Key]!))
         };
@@ -82,11 +80,13 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddProblemDetails();
+
 builder.Services.AddCors(options =>
 {
     var policyName = builder.Configuration[ConfigKeys.CorsPolicyName]!;
     var allowedOrigins = builder.Configuration.GetSection(ConfigKeys.CorsAllowedOrigins).Get<string[]>()!;
-    
+
     options.AddPolicy(policyName, policy =>
     {
         policy.WithOrigins(allowedOrigins)
@@ -100,6 +100,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Run database migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -109,9 +116,10 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler();
+    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // Disabled for Docker development
 
 app.UseCors(builder.Configuration[ConfigKeys.CorsPolicyName]!);
 

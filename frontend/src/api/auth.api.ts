@@ -1,6 +1,6 @@
 import { fetchClientAPI } from '@/api/fetch.client.api';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 
 export async function login(email: string, password: string) {
   return await fetchClientAPI(`${BASE_URL}/auth/login`, {
