@@ -1,3 +1,4 @@
+version: "3.9"
 
 services:
   postgres:
@@ -19,6 +20,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+      target: final
     container_name: kayra-backend
     ports:
       - "8081:8080"
@@ -27,6 +29,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=products;Username=kayraexp;Password=12345
     depends_on:
       - postgres
+    command: ["sh", "/docker-entrypoint.sh"] # migration ve uygulama başlatma
     restart: unless-stopped
     networks:
       - kayra-network
