@@ -11,9 +11,6 @@ const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 export async function getAllCategories(): Promise<IPagedResult<ICategoryResponse> | null> {
   return await fetchServerAPI(`${BASE_URL}/categories`, {
     method: 'GET',
-    next: {
-      revalidate: 60,
-    },
   });
 }
 

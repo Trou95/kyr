@@ -99,7 +99,7 @@ export function CategoriesContent({ initialCategories }: CategoriesContentProps)
                 />
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleUpdate(category.id)}
+                    onClick={() => handleUpdate(category?.id)}
                     disabled={isPending || !editForm.name.trim()}
                     className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
                   >
@@ -118,8 +118,8 @@ export function CategoriesContent({ initialCategories }: CategoriesContentProps)
               // View Mode
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">{category.name}</h3>
-                  {category.description && <p className="text-gray-600">{category.description}</p>}
+                  <h3 className="text-lg font-semibold">{category?.name}</h3>
+                  {category?.description && <p className="text-gray-600">{category?.description}</p>}
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -130,7 +130,7 @@ export function CategoriesContent({ initialCategories }: CategoriesContentProps)
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(category.id)}
+                    onClick={() => handleDelete(category?.id)}
                     disabled={isPending}
                     className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600 disabled:opacity-50"
                   >

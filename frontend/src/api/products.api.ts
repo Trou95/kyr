@@ -11,9 +11,6 @@ const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 export async function getAllProducts(): Promise<IPagedResult<IProductResponse> | null> {
   return await fetchServerAPI(`${BASE_URL}/products`, {
     method: 'GET',
-    next: {
-      revalidate: 60,
-    },
   });
 }
 

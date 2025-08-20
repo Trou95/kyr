@@ -119,8 +119,6 @@ export function ProductsContent({ initialProducts, categories }: ProductsContent
                   onChange={(e) => setEditForm((prev) => ({ ...prev, price: Number(e.target.value) }))}
                   className="w-full rounded border p-2"
                   placeholder="Price"
-                  min="0"
-                  step="0.01"
                 />
                 <select
                   value={editForm.categoryId}
@@ -130,14 +128,14 @@ export function ProductsContent({ initialProducts, categories }: ProductsContent
                 >
                   <option value="">Select Category</option>
                   {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
+                    <option key={category?.id} value={category?.id}>
                       {category.name}
                     </option>
                   ))}
                 </select>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleUpdate(product.id)}
+                    onClick={() => handleUpdate(product?.id)}
                     disabled={isPending || !editForm.name.trim()}
                     className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
                   >
@@ -155,11 +153,11 @@ export function ProductsContent({ initialProducts, categories }: ProductsContent
             ) : (
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">{product.name}</h3>
-                  {product.description && <p className="text-gray-600">{product.description}</p>}
+                  <h3 className="text-lg font-semibold">{product?.name}</h3>
+                  {product?.description && <p className="text-gray-600">{product?.description}</p>}
                   <div className="mt-2 flex gap-4 text-sm text-gray-500">
-                    <span className="font-semibold text-green-600">{formatPrice(product.price)}</span>
-                    <span>Category: {product.categoryName}</span>
+                    <span className="font-semibold text-green-600">{formatPrice(product?.price)}</span>
+                    <span>Category: {product?.categoryName}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -171,7 +169,7 @@ export function ProductsContent({ initialProducts, categories }: ProductsContent
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(product.id)}
+                    onClick={() => handleDelete(product?.id)}
                     disabled={isPending}
                     className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600 disabled:opacity-50"
                   >
@@ -250,8 +248,6 @@ function NewProductForm({
         onChange={(e) => setFormData((prev) => ({ ...prev, price: Number(e.target.value) }))}
         placeholder="Price"
         className="w-full rounded border p-2"
-        min="0"
-        step="0.01"
         required
       />
       <select
@@ -262,7 +258,7 @@ function NewProductForm({
       >
         <option value="">Select Category</option>
         {categories.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category?.id} value={category?.id}>
             {category.name}
           </option>
         ))}
