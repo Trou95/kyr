@@ -1,26 +1,27 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { register } from '@/api/auth.api';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { register } from "@/api/auth.api";
+import { useRouter } from "next/navigation";
+import { ApiError, ErrorObject } from '@/api/fetch.client.api';
 
 export default function RegisterForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<ErrorObject[]>([]);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setErrors([]);
 
     if (password !== confirmPassword) {
-      setError('Şifreler eşleşmiyor!');
+      setErrors([{ code: "PasswordMismatch", description: "Şifreler eşleşmiyor!" }]);
       return;
     }
 
@@ -28,17 +29,25 @@ export default function RegisterForm() {
 
     try {
       await register(username, email, password);
-      router.push('/');
-    } catch (error: unknown) {
-      setError((error as Error).message || 'Registration failed');
-    } finally {
-      setIsLoading(false);
+      router.push("/");
+    } catch (err: unknown) {
+      if (err instanceof ApiError) {
+        setErrors(err.errors);
+      } else {
+        setErrors([{ code: "Unknown", description: "Kayıt işlemi başarısız oldu." }]);
+      }
     }
   };
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-      {error && <div className="text-center text-sm text-red-600">{error}</div>}
+      {errors.length > 0 && (
+        <ul className="list-disc list-inside text-sm text-red-600">
+          {errors.map((err, index) => (
+            <li key={index}>{err.description}</li>
+          ))}
+        </ul>
+      )}
       <div className="space-y-4">
         <div>
           <label htmlFor="username" className="sr-only">
@@ -51,7 +60,7 @@ export default function RegisterForm() {
             required
             placeholder="Kullanıcı Adı"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -65,7 +74,7 @@ export default function RegisterForm() {
             required
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -79,7 +88,7 @@ export default function RegisterForm() {
             required
             placeholder="Şifre"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           />
         </div>
         <div>
@@ -93,14 +102,14 @@ export default function RegisterForm() {
             required
             placeholder="Şifre Tekrar"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
           />
         </div>
       </div>
 
       <div>
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Kayıt olunuyor...' : 'Kayıt Ol'}
+          {isLoading ? "Kayıt olunuyor..." : "Kayıt Ol"}
         </Button>
       </div>
     </form>

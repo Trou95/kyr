@@ -1,7 +1,23 @@
+export interface ErrorObject {
+  code: string;
+  description: string;
+}
+
+export class ApiError extends Error {
+  errors: ErrorObject[];
+
+  constructor(errors: ErrorObject[]) {
+    super("Validation errors from API");
+    this.name = "ApiError";
+    this.errors = errors;
+  }
+}
+
+
 export async function fetchClientAPI<T>(url: string, options: RequestInit = {}): Promise<T> {
   const isFormData = options.body instanceof FormData;
   const defaultHeaders = {
-    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
   };
 
   const headers = new Headers({
@@ -12,23 +28,28 @@ export async function fetchClientAPI<T>(url: string, options: RequestInit = {}):
   const response = await fetch(url, {
     headers,
     ...options,
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {
-   try {
-     const body = (await response.json())[0];
-     const message = body?.description || 'An error occurred while processing your request.';
-     return onFetchError(message);
-   }
-    catch {
-      return onFetchError('An unexpected error occurred.');
+    let errorBody: unknown;
+    try {
+      errorBody = await response.json(); // parse etmeye çalış
+    } catch {
+      console.log("1")
+      throw new ApiError([
+        { code: "ParseError", description: "API response could not be parsed." },
+      ]);
     }
+
+    if (Array.isArray(errorBody)) {
+      throw new ApiError(errorBody as ErrorObject[]);
+    }
+
+    throw new ApiError([
+      { code: "Unknown", description: "An error occurred while processing your request." },
+    ]);
   }
 
   return response.json();
-}
-
-function onFetchError(response: string): never {
-  throw new Error(`Error: ${response}`);
 }

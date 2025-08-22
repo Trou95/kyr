@@ -1,28 +1,35 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { login } from '@/api/auth.api';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { login } from "@/api/auth.api";
+import { useRouter } from "next/navigation";
+import { ApiError } from '@/api/fetch.client.api';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       await login(email, password);
-      router.push('/');
-    } catch (error: unknown) {
-      setError((error as Error).message || 'Login failed');
+      router.push("/");
+    } catch (err: unknown) {
+      if (err instanceof ApiError) {
+        setError(err.errors[0]?.description || "Giriş işlemi başarısız oldu.");
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Giriş işlemi başarısız oldu.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +50,7 @@ export default function LoginForm() {
             required
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -57,14 +64,14 @@ export default function LoginForm() {
             required
             placeholder="Şifre"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           />
         </div>
       </div>
 
       <div>
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+          {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
         </Button>
       </div>
     </form>
